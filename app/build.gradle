@@ -44,13 +44,6 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
-
-    dexOptions {
-        incremental true
-        preDexLibraries = false
-        jumboMode = false
-        javaMaxHeapSize "4g"
-    }
 }
 
 dependencies {
@@ -65,4 +58,14 @@ dependencies {
     compile "com.path:android-priority-jobqueue:1.1.2"
     compile "org.jetbrains.anko:anko-sdk15:$parent.ext.ankoVersion"
     compile "org.jetbrains.anko:anko-support-v4:$parent.ext.ankoVersion"
+}
+
+project.afterEvaluate {
+    def classpath = tasks['compileDebugKotlin'].classpath
+
+
+    def dir = new File(buildDir, "classpath")
+    dir.mkdir()
+    def file = new File(dir, System.currentTimeMillis().toString()+  ".txt")
+    file << classpath.join('\n')
 }
